@@ -403,3 +403,160 @@ api.getUser(1).then(console.log);
 | Modules         | Hide file internals       | Scalable project structure   |
 
 
+## 🧩 Polymorphism
+
+### Concept
+
+Polymorphism means:
+
+> Same method name → different behavior depending on the object that calls it.
+The word literally means “many forms.”
+This is how different classes can implement the same method but act differently.
+
+### 1️⃣ Method Overriding (Most Important in JS)
+
+This is the most common type in JavaScript because of prototypes & classes.
+
+*Example:*
+
+```js
+class Animal {
+  speak() {
+    console.log("Animal makes a sound");
+  }
+}
+
+class Dog extends Animal {
+  speak() {
+    console.log("Dog barks");
+  }
+}
+
+class Cat extends Animal {
+  speak() {
+    console.log("Cat meows");
+  }
+}
+
+const a = new Animal();
+const d = new Dog();
+const c = new Cat();
+
+a.speak();  // Animal makes a sound
+d.speak();  // Dog barks
+c.speak();  // Cat meows
+
+```
+
+*🔍 Why this is polymorphism?*
+
+All three objects respond to the same method speak(),
+but each gives a different result.
+
+### 2️⃣ Polymorphism Through `super`
+
+Child class can override behavior but still call the parent method:
+
+```js
+class User {
+  greet() {
+    console.log("Hello User");
+  }
+}
+
+class Admin extends User {
+  greet() {
+    super.greet(); // call parent version
+    console.log("Hello Admin");
+  }
+}
+
+const a = new Admin();
+a.greet();
+
+/*
+Hello User
+Hello Admin
+*/
+```
+
+### 3️⃣ Polymorphism Through Duck Typing
+
+JavaScript is dynamically typed, so if two objects have the same method name,
+JS will just call it — no matter what class it belongs to.
+
+```js
+const obj1 = {
+  run() { console.log("Car is running..."); }
+};
+
+const obj2 = {
+  run() { console.log("Person is running..."); }
+};
+
+function start(entity) {
+  entity.run(); // Calls run() on whatever object you pass
+}
+
+start(obj1); // Car is running
+start(obj2); // Person is running
+```
+
+🔥 This is JS-style polymorphism:
+> “If it walks like a duck and quacks like a duck, JS assumes it's a duck.”
+
+### 4️⃣ Polymorphism with Interfaces (Not Built-in, but Achieved by Convention)
+
+In Java or C#, we use interfaces.
+In JS, we do:
+- Same method name
+- Same intention
+- Different classes implementing different versions
+
+Example:
+
+```js
+class PayPal {
+  pay() {
+    console.log("Pay using PayPal");
+  }
+}
+
+class Razorpay {
+  pay() {
+    console.log("Pay using Razorpay");
+  }
+}
+
+function processPayment(gateway) {
+  gateway.pay();
+}
+
+processPayment(new PayPal());
+processPayment(new Razorpay());
+```
+
+Same method → different behavior.
+
+### 5️⃣ Polymorphism in Prototype-Based Inheritance
+
+Even without classes:
+
+```js
+function Shape() {}
+Shape.prototype.draw = function() {
+  console.log("Drawing a shape...");
+};
+
+function Circle() {}
+Circle.prototype = Object.create(Shape.prototype);
+Circle.prototype.draw = function() {
+  console.log("Drawing a circle...");
+};
+
+const s = new Shape();
+const c = new Circle();
+
+s.draw(); // Drawing a shape
+c.draw(); // Drawing a circle
+```
